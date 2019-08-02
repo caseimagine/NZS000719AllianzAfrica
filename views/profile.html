@@ -30,6 +30,7 @@
                 <span ng-show="campo.obrigatorio">*</span>
                 <br>
                 <small> <em>{{campo.customPlaceholder | iif : campo.customPlaceholder : campo.placeholder}}</em></small>
+                <small ng-if="campo.descricaoLonga || campo.customDescricaoLonga"><br><strong>* {{checkLabel(campo.descricaoLonga, campo.customDescricaoLonga)}}</strong></small>
             </label>
 
             <!-- campos de texto / tel -->
