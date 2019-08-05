@@ -1,12 +1,12 @@
-<h2 translate="Perfil"></h2>
+<h1 translate="Perfil"></h1>
 
 <p>{{titular.Nome}},
-    <span translate>seja bem-vindo(a)!</span>
+    <span>seja bem-vindo(a)! Você faz parte do <strong>{{grupo.nome}}</strong>, guarde esta informação, pois ela será importante no decorrer do processo.</span>
 </p>
 
-<p>O prazo limite é dia {{grupo.deadlineInscricao}}.</p>
+<p>Para que possamos organizar sua viagem da melhor forma, pedimos que preencha esse formulário até o dia {{grupo.deadlineInscricao}}. Contamos com a sua ajuda!</p>
 
-<p><span translate="Profile.MandatoryFields"></span></p>
+<p>Lembrando que os campos marcados com * são de preenchimento obrigatório.</p>
 
 <form name="userForm" ng-submit="submitForm(userForm.$valid)" ng-if="titular">
     <fieldset ng-repeat="atribuido in formulario.lists['Campos definidos'] | groupBy:'atribuicao'" ng-disabled="disableFields()">
@@ -30,6 +30,7 @@
                 <span ng-show="campo.obrigatorio">*</span>
                 <br>
                 <small> <em>{{campo.customPlaceholder | iif : campo.customPlaceholder : campo.placeholder}}</em></small>
+                <small ng-if="campo.descricaoLonga || campo.customDescricaoLonga"><br><strong>* {{checkLabel(campo.descricaoLonga, campo.customDescricaoLonga)}}</strong></small>
             </label>
 
             <!-- campos de texto / tel -->
