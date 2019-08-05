@@ -1,33 +1,19 @@
-<h1>Dicas</h1>
+<p><span ng-repeat="(key, value) in dicasData | groupBy: 'categoria'">
+     <a data-ng-click="sortByCategory(key)">{{key}}</a>
+</span></p>
 
-<p class="filtro-categorias text-center">
-    <span ng-repeat="(key, value) in dicasData | groupBy: 'categoria'">
-        <a data-ng-click="sortByCategory(key)">{{key}}</a>
-    </span>
-</p>
+<div class="form-group">
+
+</div>
+    <form id="searchForm">
+        <input type="text" class="form-control" id="searchBox" placeholder="{{'Busca' | translate}}" data-ng-model="searchTxt" data-ng-model-options="{debounce : 600}" />
+        <i class="icon-search"></i>
+    </form>
 
 
-<form id="searchForm">
-    <input type="text" class="form-control" id="searchBox" placeholder="{{'Busca' | translate}}"
-        data-ng-model="searchTxt" data-ng-model-options="{debounce : 600}" />
-    <i class="icon-search"></i>
-</form>
 
-<div class="row dynamic-grid" angular-grid="dicasDataFiltered" ag-refresh-on-img-load="true" ag-options="{cssGrid: true}">
-    <div class="col-xs-12 col-sm-6 grid" data-ng-repeat="dica in dicasDataFiltered">
-        <div class="card-padrao com-icone">
-            <img class="icone" ng-src="{{dica.icone}}" alt="{{dica.titulo}}">
-            <h2 ng-bind-html="dica.titulo"></h2>
-            <ng-bind-html ng-bind-html="dica.conteudo"></ng-bind-html>
-            <ng-bind-html ng-if="dica.ver_mais" ng-bind-html="dica.conteudo_extra"></ng-bind-html>
-            <a ng-if="dica.conteudo_extra !== ''" ng-click="dica.ver_mais = !dica.ver_mais" class="text-right">
-                <small>
-                    <strong>
-                        <span ng-if="!dica.ver_mais" translate>Ver mais</span>
-                        <span ng-if="dica.ver_mais" translate>Ver menos</span>
-                    </strong>
-                </small></a>
-        </div>
-
+<div class="row dynamic-grid" angular-grid="dicasDataFiltered" ag-refresh-on-img-load="true">
+    <div class="col-xs-12 col-sm-6 col-md-4 grid"  data-ng-repeat="dica in dicasDataFiltered" >
+        {{dica.titulo}}
     </div>
 </div>

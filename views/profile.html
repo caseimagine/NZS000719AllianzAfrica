@@ -1,14 +1,14 @@
-<h1 translate="Perfil"></h1>
+<h2 translate="Perfil"></h2>
 
 <p>{{titular.Nome}},
-    <span>seja bem-vindo(a)! Você faz parte do <strong>{{grupo.nome}}</strong>, guarde esta informação, pois ela será importante no decorrer do processo.</span>
+    <span translate>seja bem-vindo(a)!</span>
 </p>
 
-<p>Para que possamos organizar sua viagem da melhor forma, pedimos que preencha esse formulário até o dia {{grupo.deadlineInscricao}}. Contamos com a sua ajuda!</p>
+<p>O prazo limite é dia {{grupo.deadlineInscricao}}.</p>
 
-<p>Lembrando que os campos marcados com * são de preenchimento obrigatório.</p>
+<p><span translate="Profile.MandatoryFields"></span></p>
 
-<form name="userForm" ng-submit="submitForm(userForm.$valid)">
+<form name="userForm" ng-submit="submitForm(userForm.$valid)" ng-if="titular">
     <fieldset ng-repeat="atribuido in formulario.lists['Campos definidos'] | groupBy:'atribuicao'" ng-disabled="disableFields()">
 
         <h3>
@@ -30,7 +30,6 @@
                 <span ng-show="campo.obrigatorio">*</span>
                 <br>
                 <small> <em>{{campo.customPlaceholder | iif : campo.customPlaceholder : campo.placeholder}}</em></small>
-                <small ng-if="campo.descricaoLonga || campo.customDescricaoLonga"><br><strong>* {{checkLabel(campo.descricaoLonga, campo.customDescricaoLonga)}}</strong></small>
             </label>
 
             <!-- campos de texto / tel -->
@@ -45,8 +44,8 @@
             <input ng-if="(campo.type === 'email')"
             type="{{campo.type}}" id="{{atribuido[0].atribuicao + campo.key}}" name="{{atribuido[0].atribuicao + campo.key}}"
             class="form-control" maxlength="{{campo.tamanhoMaximo}}" minlength="{{campo.tamanhoMinimo}}"
-            placeholder="" ui-mask="{{campo.mascara}}" ng-required="campo.obrigatorio" ng-model="campo.value" ng-change="campo.value=campo.value.toLowerCase();">
-            
+            placeholder="" ui-mask="{{campo.mascara}}" ng-required="campo.obrigatorio" ng-model="campo.value"  ng-keyup="campo.value = campo.value.toLowerCase();">
+
             <!-- campos de select -->
 
             <select ng-if="(campo.type === 'select') || (campo.type === 'text' && campo.colmaSeparatedOptions !== null)"
@@ -81,16 +80,30 @@
 
             <!-- campo de data em uma string -->
 
-            <input ng-if="(campo.type === 'date-string')" type="text" name="{{atribuido[0].atribuicao + campo.key}}" id="{{atribuido[0].atribuicao + campo.key}}"
-                ui-mask-placeholder="{{campo.customPlaceholder | iif : campo.customPlaceholder : campo.placeholder}}"
-                class="form-control" ng-model="campo.value" ui-mask='99/99/9999' ng-required="campo.obrigatorio"
-                model-view-value="true">
+            <div class="input-group" ng-if="(campo.type === 'date-string')">
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    name="{{atribuido[0].atribuicao + campo.key}}"
+                    id="{{atribuido[0].atribuicao + campo.key}}"
+                    ng-model="campo.value" 
+                    uib-datepicker-popup="d!/M!/yyyy"
+                    ng-required="campo.obrigatorio" 
+                    is-open="campo.opened"  
+                    show-button-bar="false"
+                />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="abreCalendario(campo)"><i
+                            class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
 
-            <span class="material-icons form-control-feedback" ng-if="userForm[atribuido[0].atribuicao + campo.key].$invalid">clear</span>
+            <span class="material-icons form-control-feedback"
+                ng-if="userForm[atribuido[0].atribuicao + campo.key].$invalid">clear</span>
 
         </div>
     </fieldset>
-    <div ng-if="userForm.$error.required || userForm.$error.mask" class="alert alert-danger">
+    <div ng-if="userForm.$error.required || userForm.$error.mask || userForm.$error.email" class="alert alert-danger">
         <div class="alert-icon">
             <i class="material-icons">error_outline</i>
         </div>
